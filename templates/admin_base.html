@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <h1 class="display-6 mb-0">Admin Dashboard</h1>
+    </div>
+
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link {% if active_page == 'users' %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">
+                <i class="bi bi-people-fill"></i> Manajemen Pengguna
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if active_page == 'posts' %}active{% endif %}" href="{{ url_for('admin_manage_posts') }}">
+                <i class="bi bi-file-earmark-text-fill"></i> Manajemen Postingan
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if active_page == 'comments' %}active{% endif %}" href="{{ url_for('admin_manage_comments') }}">
+                <i class="bi bi-chat-dots-fill"></i> Manajemen Komentar
+            </a>
+        </li>
+    </ul>
+
+    {% block admin_content %}{% endblock %}
+
+{% endblock %}

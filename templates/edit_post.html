@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Edit Postingan: {{ post.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="pb-2 mb-4 border-bottom">
+        <h1 class="display-6">Edit Postingan</h1>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light border-bottom">
+                    <h5 class="mb-0">Ubah Detail Postingan Anda</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">Judul</label>
+                            <input type="text" name="title" id="postTitle" class="form-control form-control-lg" value="{{ post.title }}" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="postContent" class="form-label">Konten</label>
+                            <textarea name="content" id="postContent" class="form-control" rows="10" required>{{ post.content }}</textarea>
+                        </div>
+                        
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ url_for('user_dashboard') }}" class="btn btn-secondary me-2">Batal</a>
+                            <button type="submit" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                    <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                </svg>
+                                Simpan Perubahan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Forum Publik
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-6">Diskusi Publik</h1>
+        <button type="button" class="btn btn-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#addPostModal">
+            📄 Buat Postingan Baru
+        </button>
+    </div>
+    <hr>
+    
+    {% if posts %}
+        {% for post in posts %}
+            {% if loop.first %}
+                <div class="p-5 mb-4 bg-light rounded-3 shadow-sm latest-post">
+                    <div class="container-fluid py-3">
+                        <h1 class="display-5 fw-bold">{{ post.title }} <span class="badge bg-primary">✨ Terbaru!</span></h1>
+                        <p class="fs-4 col-md-10">{{ post.content | safe }}</p>
+                        <p class="text-muted">oleh: <strong>{{ post.author.username }}</strong></p>
+
+                        {% if post.author.id == session['user_id'] %}
+                            <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-warning">✏️ Edit</a>
+                            <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-danger">🗑️ Hapus</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="card mb-3 shadow-sm card-post">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ post.title }}</h4>
+                        <p class="card-text">{{ post.content | safe }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                        <small class="text-muted">oleh: {{ post.author.username }}</small>
+                        <div>
+                            {% if post.author.id == session['user_id'] %}
+                                <a href="{{ url_for('edit_post', post_id=post.id) }}" class="btn btn-outline-secondary btn-sm">✏️ Edit</a>
+                                <a href="{{ url_for('delete_post', post_id=post.id) }}" class="btn btn-outline-danger btn-sm">🗑️ Hapus</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info text-center">
+            <p class="mb-0">Belum ada postingan. Jadilah yang pertama!</p>
+        </div>
+    {% endif %}
+
+    <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addPostModalLabel">Buat Postingan Baru</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('add_post') }}" id="addPostForm">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Judul</label>
+                            <input type="text" name="title" id="title" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Konten</label>
+                            <textarea name="content" id="content" class="form-control" rows="5" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" form="addPostForm">Kirim Postingan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

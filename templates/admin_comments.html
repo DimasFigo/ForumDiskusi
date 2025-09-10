@@ -1,0 +1,84 @@
+{% extends 'admin_base.html' %}
+{% set active_page = 'comments' %}
+
+{% block admin_content %}
+    <h4 class="mb-4">Data Semua Komentar</h4>
+     <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Isi Komentar</th>
+                            <th>Penulis</th>
+                            <th>Di Postingan</th>
+                            <th class="text-end">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in comments %}
+                        <tr>
+                            <td>{{ comment.id }}</td>
+                            <td>{{ comment.content | truncate(50) }}</td>
+                            <td>{{ comment.author.username }}</td>
+                            <td>
+                                <a href="{{ url_for('post_detail', post_id=comment.post.id) }}" class="text-dark" target="_blank" title="Lihat Postingan">
+                                    {{ comment.post.title | truncate(30) }}
+                                </a>
+                            </td>
+                            <td class="text-end">
+                                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteCommentModal" data-comment-id="{{ comment.id }}" data-comment-content="{{ comment.content | truncate(50) }}">
+                                    Hapus
+                                </button>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">Belum ada komentar.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteCommentModalLabel">Konfirmasi Hapus</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus komentar ini?
+                    <blockquote class="blockquote mt-2">
+                        "<span id="commentContentToDelete"></span>"
+                    </blockquote>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteCommentForm" method="POST" action="">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Ya, Hapus Komentar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const deleteCommentModal = document.getElementById('deleteCommentModal');
+        deleteCommentModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const commentId = button.getAttribute('data-comment-id');
+            const commentContent = button.getAttribute('data-comment-content');
+            
+            const modalBodyContent = deleteCommentModal.querySelector('#commentContentToDelete');
+            const deleteForm = deleteCommentModal.querySelector('#deleteCommentForm');
+            
+            modalBodyContent.textContent = commentContent;
+            deleteForm.action = `/admin/delete_comment/${commentId}`;
+        });
+    </script>
+{% endblock %}
