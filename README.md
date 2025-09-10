@@ -22,8 +22,8 @@ Aplikasi forum sederhana yang dibangun dengan Python & Flask, dibuat dengan kere
 
 ### Cara Menjalankan
 
-**1. Clone & Install**
 ```bash
+**1. Clone & Install**
 git clone [https://github.com/DimasFigo/ForumDiskusi.git](https://github.com/DimasFigo/ForumDiskusi.git)
 cd ForumDiskusi
 pip install -r requirements.txt
