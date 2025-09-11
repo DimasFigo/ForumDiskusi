@@ -56,6 +56,7 @@
             {% else %}
                 <a href="{{ url_for('post_detail', post_id=post.id) }}" class="list-group-item list-group-item-action d-flex gap-3 py-3 card-post">
                     <img src="{{ url_for('static', filename='images/' + post.author.avatar_url) }}" alt="{{ post.author.username }}" width="40" height="40" class="rounded-circle flex-shrink-0">
+                    
                     <div class="d-flex gap-2 w-100 justify-content-between align-items-start">
                         <div>
                             <h5 class="mb-1">{{ post.title }}</h5>
@@ -82,10 +83,43 @@
         {% endfor %}
                 </div> {# Penutup untuk .list-group #}
     {% else %}
-        {% endif %}
-
-    <div class="modal fade" id="addPostModal" ...>
+        <div class="card shadow-sm">
+            <div class="card-body text-center p-5">
+                <h3 class="text-muted">Belum Ada Postingan</h3>
+                <p>Jadilah yang pertama memulai diskusi di forum ini!</p>
+                <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addPostModal">
+                    Buat Postingan Pertamamu
+                </button>
+            </div>
         </div>
+    {% endif %}
+
+    <div class="modal fade" id="addPostModal" tabindex="-1" aria-labelledby="addPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addPostModalLabel">Buat Postingan Baru</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('add_post') }}" id="addPostForm">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Judul</label>
+                            <input type="text" name="title" id="title" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">Konten</label>
+                            <textarea name="content" id="content" class="form-control" rows="5" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" form="addPostForm">Kirim Postingan</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade" id="deletePostModal" tabindex="-1" aria-labelledby="deletePostModalLabel" aria-hidden="true">
         <div class="modal-dialog">
